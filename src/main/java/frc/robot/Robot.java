@@ -12,13 +12,12 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+@SuppressWarnings("removal")
 public class Robot extends TimedRobot {
   
-
   private XboxController controller;
-
   public static SparkMaxConfig DefaultConfig = new SparkMaxConfig();    
-  private SparkMax motor3; 
+  private SparkMax motor; 
   public static final int kmotorCanID = 2;
 
   static {
@@ -28,14 +27,12 @@ public class Robot extends TimedRobot {
     DefaultConfig.inverted(false);
   }
 
-
   public Robot() {}
-
 
   @Override
   public void robotInit() {
-    motor3 = new SparkMax(2, MotorType.kBrushless);
-    motor3.configure(DefaultConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    motor = new SparkMax(kmotorCanID, MotorType.kBrushless);
+    motor.configure(DefaultConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     controller = new XboxController(0);
   }
 
@@ -53,15 +50,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    
+  
     if (controller.getAButton()) {
-      motor3.set(-0.6);      
+      motor.set(1.0);      
     }
     else {
-      motor3.stopMotor();
+      motor.stopMotor();
     }
-
- 
   }
 
   @Override
