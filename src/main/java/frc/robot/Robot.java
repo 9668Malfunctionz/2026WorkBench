@@ -11,11 +11,14 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.malfunctionz.malfunctionboard.nt.MalfunctionBoard;
+import com.malfunctionz.malfunctionboard.nt.datatypes.*;
 
 @SuppressWarnings("removal")
 public class Robot extends TimedRobot {
   
   private XboxController controller;
+  private final MalfunctionBoard dashboard = new MalfunctionBoard();
   public static SparkMaxConfig DefaultConfig = new SparkMaxConfig();    
   private SparkMax motor; 
   public static final int kmotorCanID = 2;
@@ -52,10 +55,12 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
   
     if (controller.getAButton()) {
-      motor.set(1.0);      
+      motor.set(1.0);
+      dashboard.writeData("motor", new MBString("Running"));
     }
     else {
       motor.stopMotor();
+      dashboard.writeData("motor", new MBString("Idle"));
     }
   }
 
