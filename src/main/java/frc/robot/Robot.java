@@ -18,7 +18,6 @@ import com.malfunctionz.malfunctionboard.nt.datatypes.*;
 public class Robot extends TimedRobot {
   
   private XboxController controller;
-  private final MalfunctionBoard dashboard = new MalfunctionBoard();
   public static SparkMaxConfig DefaultConfig = new SparkMaxConfig();    
   private SparkMax motor; 
   public static final int kmotorCanID = 2;
@@ -56,11 +55,11 @@ public class Robot extends TimedRobot {
   
     if (controller.getAButton()) {
       motor.set(1.0);
-      dashboard.writeData("motor", new MBString("Running"));
+      MalfunctionBoard.writeData("motor", new MBString("Running"));
     }
     else {
       motor.stopMotor();
-      dashboard.writeData("motor", new MBString("Idle"));
+      MalfunctionBoard.writeData("motor", new MBString("Idle"));
     }
   }
 
