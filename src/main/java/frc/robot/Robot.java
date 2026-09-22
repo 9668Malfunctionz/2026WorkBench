@@ -53,14 +53,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  
-    if (controller.getAButton()) {
-      motor.set(1.0);
-      dashboard.writeData("motor", new MBString("Running"));
+    if (controller.getRightTriggerAxis() > 0.1 && controller.getLeftTriggerAxis() > 0.1) {
+      motor.set(controller.getRightTriggerAxis() - controller.getLeftTriggerAxis());
+    }
+    if (controller.getRightTriggerAxis() > 0.1) {
+      motor.set(controller.getRightTriggerAxis());
+    }
+    if (controller.getLeftTriggerAxis() > 0.1) {
+      motor.set(-1 * controller.getLeftTriggerAxis());
     }
     else {
       motor.stopMotor();
-      dashboard.writeData("motor", new MBString("Idle"));
     }
   }
 
@@ -76,3 +79,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {}
 }
+
