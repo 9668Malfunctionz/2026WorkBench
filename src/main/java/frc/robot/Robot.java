@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
     else {
       motor7.stopMotor();
     }
-    }
+  }
  
   
 
