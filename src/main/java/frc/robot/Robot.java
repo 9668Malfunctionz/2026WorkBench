@@ -16,10 +16,13 @@ public class Robot extends TimedRobot {
   
 
   private XboxController controller;
-
+  private double currentRightTriggerValue;
+  private double currentLeftTriggerValue;
   public static SparkMaxConfig DefaultConfig = new SparkMaxConfig();    
   private SparkMax motor3; 
-  public static final int kmotorCanID = 2;
+  private SparkMax motor7; 
+  public static final int kmotor3CanID = 2;
+  public static final int kmotor7CanID = 7;
 
   static {
     DefaultConfig.smartCurrentLimit(50);
@@ -32,10 +35,13 @@ public class Robot extends TimedRobot {
   public Robot() {}
 
 
+  @SuppressWarnings("removal")
   @Override
   public void robotInit() {
-    motor3 = new SparkMax(2, MotorType.kBrushless);
+    motor3 = new SparkMax(kmotor3CanID, MotorType.kBrushless);
     motor3.configure(DefaultConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    motor7 = new SparkMax(kmotor7CanID, MotorType.kBrushless);
+    motor7.configure(DefaultConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     controller = new XboxController(0);
   }
 
@@ -54,15 +60,24 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     
-    if (controller.getAButton()) {
-      motor3.set(-0.6);      
+    currentRightTriggerValue = controller.getRightTriggerAxis();
+    if (currentRightTriggerValue > 0.05) {
+      motor3.set(currentRightTriggerValue);
     }
     else {
       motor3.stopMotor();
     }
 
+    currentLeftTriggerValue = controller.getLeftTriggerAxis(); 
+    if (currentLeftTriggerValue > 0.05) {
+      motor7.set(currentLeftTriggerValue);
+    }
+    else {
+      motor7.stopMotor();
+    }
+    }
  
-  }
+  
 
   @Override
   public void disabledInit() {}
