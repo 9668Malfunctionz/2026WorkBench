@@ -20,8 +20,12 @@ public class Robot extends TimedRobot {
   private XboxController controller;
   private final MalfunctionBoard dashboard = new MalfunctionBoard();
   public static SparkMaxConfig DefaultConfig = new SparkMaxConfig();    
-  private SparkMax motor; 
+  private SparkMax motor;
+  private SparkMax leftMotor;
+  private SparkMax rightMotor;
   public static final int kmotorCanID = 2;
+  public static final int leftMotorCanID = 3;
+  public static final int rightMotorCanID = 4;
 
   static {
     DefaultConfig.smartCurrentLimit(50);
@@ -35,6 +39,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     motor = new SparkMax(kmotorCanID, MotorType.kBrushless);
+    leftMotor = new SparkMax(leftMotorCanID, MotorType.kBrushless);
+    rightMotor = new SparkMax(rightMotorCanID, MotorType.kBrushless);
     motor.configure(DefaultConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     controller = new XboxController(0);
   }
@@ -53,17 +59,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (controller.getRightTriggerAxis() > 0.1 && controller.getLeftTriggerAxis() > 0.1) {
-      motor.set(controller.getRightTriggerAxis() - controller.getLeftTriggerAxis());
-    }
-    if (controller.getRightTriggerAxis() > 0.1) {
-      motor.set(controller.getRightTriggerAxis());
-    }
-    if (controller.getLeftTriggerAxis() > 0.1) {
-      motor.set(-1 * controller.getLeftTriggerAxis());
+    if (Math.abs(controller.getLeftY()) > 0.1) {
+      rightMotor.set(controller.getLeftY());
     }
     else {
-      motor.stopMotor();
+      rightMotor.stopMotor();
+    }
+    if (Math.abs(controller.getRightY()) > 0.1) {
+      leftMotor.set(controller.getRightY());
+    }
+    else {
+      leftMotor.stopMotor();
     }
   }
 
